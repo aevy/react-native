@@ -288,6 +288,8 @@ RCT_EXPORT_MODULE()
 {
   __block RCTDownloadTask *task;
 
+  bool headMethod = [request.HTTPMethod isEqualToString:@"HEAD"];
+  
   RCTURLRequestProgressBlock uploadProgressBlock = ^(int64_t progress, int64_t total) {
     dispatch_async(_methodQueue, ^{
       NSArray *responseJSON = @[task.requestID, @((double)progress), @((double)total)];
@@ -312,7 +314,7 @@ RCT_EXPORT_MODULE()
     });
   };
 
-  void (^incrementalDataBlock)(NSData *) = incrementalUpdates ? ^(NSData *data) {
+  void (^incrementalDataBlock)(NSData *) = (incrementalUpdates && !headMethod) ? ^(NSData *data) {
     dispatch_async(_methodQueue, ^{
       [self sendData:data forTask:task];
     });
@@ -321,7 +323,7 @@ RCT_EXPORT_MODULE()
   RCTURLRequestCompletionBlock completionBlock =
   ^(NSURLResponse *response, NSData *data, NSError *error) {
     dispatch_async(_methodQueue, ^{
-      if (!incrementalUpdates) {
+      if (!incrementalUpdates && !headMethod) {
         [self sendData:data forTask:task];
       }
       NSArray *responseJSON = @[task.requestID,
