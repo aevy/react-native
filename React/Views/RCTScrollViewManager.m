@@ -83,7 +83,7 @@ RCT_EXPORT_METHOD(getContentSize:(nonnull NSNumber *)reactTag
 
     UIView *view = viewRegistry[reactTag];
     if (!view) {
-      RCTLogError(@"Cannot find view with tag #%@", reactTag);
+      RCTLogWarn(@"Cannot find view with tag #%@", reactTag);
       return;
     }
 
@@ -102,7 +102,7 @@ RCT_EXPORT_METHOD(calculateChildFrames:(nonnull NSNumber *)reactTag
 
     UIView *view = viewRegistry[reactTag];
     if (!view) {
-      RCTLogError(@"Cannot find view with tag #%@", reactTag);
+      RCTLogWarn(@"Cannot find view with tag #%@", reactTag);
       return;
     }
 
