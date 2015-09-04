@@ -411,6 +411,10 @@ var ListView = React.createClass({
    */
 
   _measureAndUpdateScrollProps: function() {
+    if (!this.isMounted() {
+      return;
+    }
+
     var scrollComponent = this.getScrollResponder();
     if (!scrollComponent || !scrollComponent.getInnerViewNode) {
       return;
